@@ -11,7 +11,7 @@ import { db } from "../../Utility/firebase";
 import { useNavigate } from 'react-router-dom';
 import { collection, doc, setDoc } from "firebase/firestore";
 function Payment() {
-const [{ user,basket}] = useContext(DataContext);
+const [{ user,basket},dispatch] = useContext(DataContext);
 console.log(user);
 
 
@@ -66,10 +66,11 @@ const handelPayment = async (e) => {
     });
 
     // Clear basket and navigate
+dispatch({type:"EMPTY_BASKET"});
     setProcessing(false);
     navigate("/orders", { state: { msg: "You have placed a new order!" } });
   } catch (error) {
-    console.error("Payment error:", error);
+    console.log("Payment error:", error);
     setProcessing(false);
   }
 };

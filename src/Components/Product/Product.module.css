@@ -70,7 +70,7 @@
 }
 .product__flexed img{
     width: 300px !important;
-    height: autho;
+    height: auto;
 }
 @media screen and (max-width: 768px){
  .product__flexed {

@@ -1,6 +1,6 @@
 import React, { useState,useContext } from 'react';
 import classes from './Signup.module.css';
-import { Link,useNavigate} from 'react-router-dom';
+import { Link,useNavigate,useLocation} from 'react-router-dom';
 import {auth} from "../../Utility/firebase";
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth"
 import {ClipLoader} from "react-spinners";
@@ -20,8 +20,10 @@ function Auth () {
 
 
     const[{user}, dispatch] = useContext(DataContext);
-    const navigate = useNavigate()
-console.log(user);
+    const navigate = useNavigate();
+    const navStateData = useLocation();
+    console.log(navStateData);
+// console.log(user);
 const authHandler = async(e) => {
   e.preventDefault();
   console.log(e.target.name);
@@ -35,7 +37,7 @@ setLoading({...loading,signIn:true}
                 user:userInfo.user
               });
               setLoading({...loading, signIn:false})
-              navigate("/")
+              navigate(navStateData?.state?.redirect || " / ");
             }).catch((err) => {
             setError(err.message);
             setLoading({ ...loading, signIn: false });
@@ -48,7 +50,7 @@ createUserWithEmailAndPassword(auth,email,password).then((userInfo)=>{
     user: userInfo.user,
   });
   setLoading({...loading, signUp:false});
-   navigate("/");
+   navigate(navStateData?.state?.redirect || "/");
             })
             .catch((err) => {
                setError(err.message);
@@ -69,6 +71,18 @@ createUserWithEmailAndPassword(auth,email,password).then((userInfo)=>{
       {/* /form/ */}
       <div className={classes.login__container}>
         <h1>Sign In</h1>
+        {navStateData?.state?.msg &&(
+        <small
+        style={{
+          padding: "5px",
+          textAlign: "center",
+          color: "red",
+          fontWeight: "bold",
+        }}
+        >
+          {navStateData?.state?.msg}
+        </small>
+        )}
         <form action="">
           <div>
             <label htmlFor="email">Email</label>
